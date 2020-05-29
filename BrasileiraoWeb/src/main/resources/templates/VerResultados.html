@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Ver Resultados</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+	<div style="background-color:#00BFFF;text-align:center">
+		<h1>Projeto TI São Judas</h1>
+		<h2><a href="/">Simulação Campeonato Brasileiro</a></h2>
+	</div>
+   	<table style="border: 1px solid black;">
+    <thead>
+      <tr>
+        <th>Nome time</th>
+        <th>Pontos</th>
+        <th>Vitorias</th>
+        <th>Derrotas</th>
+        <th>Empates</th>
+        <th>Gols pro</th>
+        <th>Gols contra</th>
+        <th>Saldo gols</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr th:each="ls : ${lista}">
+      	<td th:text="${ls.Nome_time}"></td>
+     	<td th:text="${ls.Pontos}"></td>
+        <td th:text="${ls.Vitorias}"></td>
+        <td th:text="${ls.Derrotas}"></td>
+        <td th:text="${ls.Empates}"></td>
+     	<td th:text="${ls.Gols_pro}"></td>
+        <td th:text="${ls.Gols_contra}"></td>
+        <td th:text="${ls.Saldo_gols}"></td>
+      </tr>
+    </tbody>
+  </table>
+</body>
+</html>
