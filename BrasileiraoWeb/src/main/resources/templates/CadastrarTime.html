@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Cadastrar Time</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -9,17 +9,12 @@
 		<h1>Projeto TI São Judas</h1>
 		<h2><a href="/">Simulação Campeonato Brasileiro</a></h2>
 	</div>
-	<form action="#" th:action="@{/CadastrarTime}" th:object="${CadastrarTime}" method="post">
-        <p>Nome do Time: <input type="text" th:field="*{content}" /></p>
-        <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
-	</form>
-	<div style="font-size:20;text-align:left">
-		<nav>
- 			<ul class="menu">
-        		<li><a href="/LimparTime">Limpar Time</a></li>
-				<li><a href="/ListarTime">Listar Times</a></li>
-			</ul>
-		</nav>
+	<p> Cadastrar Time </p>
+	<div>
+		<form action="#" th:action="@{/CadastrarTime}" th:object="${time}" method="post">
+		<p>Nome: <input type="text" th:field="*{nome_time}" th:value="${time.nome_time}" placeholder="nome do time" required></p> 
+		<p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
+		</form> 
 	</div>
 </body>
 </html>

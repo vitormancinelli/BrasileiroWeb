@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import servico.BancoDeDados;
+import servico.Time;
 
 @Controller
 public class BrasileiroController {
@@ -21,6 +22,46 @@ public class BrasileiroController {
 			model.addAttribute("erro", e.getMessage());
 			return "Erro";
 		}
+	}
+	
+	@GetMapping("/CadastrarTime")
+	public String CadastrarTime(Model model) {
+		model.addAttribute("time", new Time());
+		return "CadastrarTime";
+	}
+	
+	@PostMapping("/CadastrarTime")
+	public String TimeCadastrado(Model model, Time time) {
+		BancoDeDados bd = new BancoDeDados();
+			try {
+				if(bd.contarTimes() <= 19) {
+					bd.cadastrarTime(time.getNome_time());
+					return "TimeCadastrado";
+				} else {
+					return "ErroContarTime";
+				}
+			} catch (Exception e) {
+				model.addAttribute("erro", e.getMessage());
+				return "Erro";
+			}
+	}
+	
+	@GetMapping("/LimparTime")
+	public String LimparTime(Model model) {
+		model.addAttribute("time", new Time());
+		return "LimparTime";
+	}
+	
+	@PostMapping("/LimparTime")
+	public String TimeLimpo(Model model, Time time) {
+		BancoDeDados bd = new BancoDeDados();
+			try {
+				bd.limparTime(time.getNumero_time());
+				return "TimeExcluido";
+			} catch (Exception e) {
+				model.addAttribute("erro", e.getMessage());
+				return "Erro";
+			}
 	}
 	
 	@GetMapping("/LimparCampeonato")
@@ -40,22 +81,6 @@ public class BrasileiroController {
 		return "ListarCampeonato";
 	}
 	
-	 @GetMapping("/CadastrarTime")
-	 public String greetingForm(Model model) {
-		 try {
-			 model.addAttribute("CadastrarTime", new NomeTime());
-			 return "CadastrarTime";
-		 } catch (Exception e) {
-				model.addAttribute("erro", e.getMessage());
-				return "Erro";
-			} 
-	 }
-
-	 @PostMapping("/CadastrarTime")
-	 public String greetingSubmit(@ModelAttribute NomeTime CadastrarTime) {
-		  return "TimeCadastrado";
-	 }
-	
 	@GetMapping("/ListarTime")
 	public String ListarTime(Model model) {
 		try {
@@ -67,19 +92,7 @@ public class BrasileiroController {
 			return "Erro";
 		}
 	}
-	
-	@GetMapping("/LimparTime")  
-	public String LimparTime(Model model) {
-		try {
-			BancoDeDados bd = new BancoDeDados();
-//			model.addAttribute("lista", bd.limparTime(2));
-			return "LimparTime";
-		} catch (Exception e) {
-			model.addAttribute("erro", e.getMessage());
-			return "Erro";
-		}	
-	}
-	
+		
 	@GetMapping("/SortearTimes")
 	public String SortearTimes(Model model) {
 		try {

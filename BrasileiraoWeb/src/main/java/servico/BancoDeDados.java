@@ -113,6 +113,24 @@ public class BancoDeDados {
 			throw new Exception("Erro ao Cadastrar Campeonato.");
 		}
 	}
+	
+	public int contarTimes() throws Exception {
+		Statement stmt = null;
+		ResultSet rs = null;
+		int count = 0;
+		try {
+			Connection conn = getConnection();
+			String query = "SELECT count(*) as count FROM brasileiro.time;";
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(query);
+			rs.next();
+			count = rs.getInt("count");
+		} catch (Exception e) {
+			System.out.println("Erro: " + e.getMessage());
+			throw new Exception("Erro ao Contar os Times.");
+		}
+		return count;
+	}
 
 	public void cadastrarTime(String nome) throws Exception {
 		Statement stmt = null;
