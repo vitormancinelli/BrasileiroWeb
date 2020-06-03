@@ -1,25 +1,30 @@
 <!DOCTYPE HTML>
-<html>
-<head>
-    <title>Time Cadastrado</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
-	<div style="background-color:#00BFFF;text-align:center">
+	<div style="background-color:#228B22;text-align:center">
 		<h1>Projeto TI São Judas</h1>
 		<h2><a href="/">Simulação Campeonato Brasileiro</a></h2>
 	</div>
+	
 	<div>
 		Time Cadastrado
 	</div>
-	<div style="font-size:20;text-align:left">
-		<nav>
- 			<ul class="menu">
-        		<li><a href="/CadastrarTime">Cadastrar Time</a></li>
-        		<li><a href="/LimparTime">Limpar Time</a></li>
-				<li><a href="/ListarTime">Listar Times</a></li>
+	
+	<div class="row-2">
+		<div class="col-sm-4 col-md-3 col-lg-3 col-xl-3 p-1">
+ 			<ul class="list-group">
+        		<li><a href="/CadastrarTime" class="list-group-item list-group-item-action list-group-item-success p-1">Cadastrar Time</a></li>
+				<li><a href="/LimparTime" class="list-group-item list-group-item-action list-group-item-success p-1">Limpar Time</a></li>
+        		<li><a href="/ListarTime" class="list-group-item list-group-item-action list-group-item-success p-1">Listar Time</a></li>
+				<li><a href="/SortearTimes" class="list-group-item list-group-item-action list-group-item-success p-1">Sortear Times</a></li>
 			</ul>
-		</nav>
+		</div>
 	</div>
+	
+	<div th:replace="fragments/script :: script">...</div> 
+	
 </body>
 </html>

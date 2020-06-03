@@ -1,14 +1,36 @@
 <!DOCTYPE HTML>
-<html>
-<head>
-    <title>Erro</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
-	<div style="background-color:#00BFFF;text-align:center">
+	<div style="background-color:#228B22;text-align:center">
 		<h1>Projeto TI São Judas</h1>
 		<h2><a href="/">Simulação Campeonato Brasileiro</a></h2>
 	</div>
+	
 	<div><span th:text="${erro}"></span></div>
+	
+	<div class="row-2">
+		<div class="col-sm-4 col-md-3 col-lg-3 col-xl-3 p-1">
+ 			<ul class="list-group">
+        		<li><a href="/CadastrarCampeonato" class="list-group-item list-group-item-action list-group-item-success p-1">Cadastrar Campeonato</a></li>
+        		<li><a href="/LimparCampeonato" class="list-group-item list-group-item-action list-group-item-success p-1">Limpar Campeonato</a></li>
+				<li><a href="/ListarCampeonato" class="list-group-item list-group-item-action list-group-item-success p-1">Listar Campeonato</a></li>
+				<li><a href="/CadastrarTime" class="list-group-item list-group-item-action list-group-item-success p-1">Cadastrar Time</a></li>
+				<li><a href="/LimparTime" class="list-group-item list-group-item-action list-group-item-success p-1">Limpar Time</a></li>
+        		<li><a href="/ListarTime" class="list-group-item list-group-item-action list-group-item-success p-1">Listar Time</a></li>
+       			<li><a href="/SortearTimes" class="list-group-item list-group-item-action list-group-item-success p-1">Sortear Times</a></li>
+				<li><a href="/SortearResultados" class="list-group-item list-group-item-action list-group-item-success p-1">Sortear Resultados</a></li>
+				<li><a href="/ListarPartidas" class="list-group-item list-group-item-action list-group-item-success p-1">Listar Partidas</a></li>
+				<li><a href="/VerResultados" class="list-group-item list-group-item-action list-group-item-success p-1">Ver Resultados</a></li>               
+				<li><a href="/VerVencedor" class="list-group-item list-group-item-action list-group-item-success p-1">Ver Vencedor</a></li>
+				<li><a href="https://www.cbf.com.br/futebol-brasileiro/noticias/campeonato-brasileiro-serie-a/confira-os-documentos-tecnicos-do-brasileiro-serie-a"  class="list-group-item list-group-item-action list-group-item-success p-1" target="blank">Regras CBF</a></li>
+			</ul>
+		</div>
+	</div>
+		
+	<div th:replace="fragments/script :: script">...</div>
+	
 </body>
 </html>
