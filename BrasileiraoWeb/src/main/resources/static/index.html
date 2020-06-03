@@ -1,23 +1,15 @@
 <!DOCTYPE HTML>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Simulação Campeonato Brasileirão</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <style>
-    ul {
-    	font-family: Arial;
-		color: blue;
-		border: 5px solid #c0c0c0;
-		float: left; 
-		-moz-box-shadow:0 10px 10px 0 #CCC; 
-		-webkit-box-shadow:0 10px 10px 0 #ccc; 
-		text-shadow:0px 0x 5px #fff;
-    }
-    </style>
+	
+	<link rel="stylesheet" type="text/css" href="/webjars/bootstrap/4.4.1/css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" href="/webjars/bootstrap/4.4.1/css/bootstrap.min.css" />  
     
 </head>
 <body>
-	<div style="background-color:#00BFFF;text-align:center">
+	<div style="background-color:#228B22;text-align:center">
 		<h1>Projeto TI São Judas</h1>
 		<h2>Simulação Campeonato Brasileiro</h2>
 	</div>
@@ -28,29 +20,33 @@
 		<p>
 		Esse projeto tem como função, simular um campeonato brasileiro.<br/>
 		A simulação segue os moldes do campeonato oficial, ou seja, segue o padrão de acordo com a CBF.<br/>
-		
 		</p>
 	</div>
 	<div style= "text-align:left">
 		<h2>Menu da Simulação</h2>
 	</div>
-	<div style="font-size:20;text-align:left">
-		<nav>
- 			<ul class="menu">
-        		<li><a href="/CadastrarCampeonato">Cadastrar Campeonato</a></li>
-        		<li><a href="/LimparCampeonato">Limpar Campeonato</a></li>
-				<li><a href="/ListarCampeonato">Listar Campeonato</a></li>
-				<li><a href="/CadastrarTime">Cadastrar Time</a></li>
-				<li><a href="/LimparTime">Limpar Time</a></li>
-        		<li><a href="/ListarTime">Listar Time</a></li>
-       			<li><a href="/SortearTimes">Sortear Times</a></li>
-				<li><a href="/SortearResultados">Sortear Resultados</a></li>
-				<li><a href="/ListarPartidas">Listar Partidas</a></li>
-				<li><a href="/VerResultados">Ver Resultados</a></li>               
-				<li><a href="/VerVencedor">Ver Vencedor</a></li>
-				<li><a href="https://www.cbf.com.br/futebol-brasileiro/noticias/campeonato-brasileiro-serie-a/confira-os-documentos-tecnicos-do-brasileiro-serie-a" target="blank">Regras CBF</a></li>
-			</ul>
-		</nav>
-	</div>
+		<div class="row-2">
+			<div class="col-sm-4 col-md-3 col-lg-3 col-xl-3 p-1">
+ 				<ul class="list-group">
+        			<li><a href="/CadastrarCampeonato" class="list-group-item list-group-item-action list-group-item-success p-1">Cadastrar Campeonato</a></li>
+        			<li><a href="/LimparCampeonato" class="list-group-item list-group-item-action list-group-item-success p-1">Limpar Campeonato</a></li>
+					<li><a href="/ListarCampeonato" class="list-group-item list-group-item-action list-group-item-success p-1">Listar Campeonato</a></li>
+					<li><a href="/CadastrarTime" class="list-group-item list-group-item-action list-group-item-success p-1">Cadastrar Time</a></li>
+					<li><a href="/LimparTime" class="list-group-item list-group-item-action list-group-item-success p-1">Limpar Time</a></li>
+        			<li><a href="/ListarTime" class="list-group-item list-group-item-action list-group-item-success p-1">Listar Time</a></li>
+       				<li><a href="/SortearTimes" class="list-group-item list-group-item-action list-group-item-success p-1">Sortear Times</a></li>
+					<li><a href="/SortearResultados" class="list-group-item list-group-item-action list-group-item-success p-1">Sortear Resultados</a></li>
+					<li><a href="/ListarPartidas" class="list-group-item list-group-item-action list-group-item-success p-1">Listar Partidas</a></li>
+					<li><a href="/VerResultados" class="list-group-item list-group-item-action list-group-item-success p-1">Ver Resultados</a></li>               
+					<li><a href="/VerVencedor" class="list-group-item list-group-item-action list-group-item-success p-1">Ver Vencedor</a></li>
+					<li><a href="https://www.cbf.com.br/futebol-brasileiro/noticias/campeonato-brasileiro-serie-a/confira-os-documentos-tecnicos-do-brasileiro-serie-a"  class="list-group-item list-group-item-action list-group-item-success p-1" target="blank">Regras CBF</a></li>
+				</ul>
+			</div>
+		</div>
+	
+	<script type="text/javascript" src="/webjars/jquery/3.4.1/jquery.min.js"></script>
+	<script type="text/javascript" src="/webjars/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="/webjars/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+	<script type="text/javascript" src="/webjars/popper.js/1.14.3/umd/popper.min.js"></script>
 </body>
 </html>
