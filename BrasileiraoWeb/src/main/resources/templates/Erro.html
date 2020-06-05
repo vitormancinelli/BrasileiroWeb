@@ -9,7 +9,12 @@
 		<h2><a href="/">Simulação Campeonato Brasileiro</a></h2>
 	</div>
 	
-	<div><span th:text="${erro}"></span></div>
+	<div class="alert alert-danger" role="alert">
+ 		 <span th:text="${erro}"></span>
+ 		 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    		<span aria-hidden="true">&times;</span>
+  		</button>
+	</div>
 	
 	<div class="row-2">
 		<div class="col-sm-4 col-md-3 col-lg-3 col-xl-3 p-1">
