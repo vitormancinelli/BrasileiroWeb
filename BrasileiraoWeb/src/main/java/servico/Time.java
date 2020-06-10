@@ -12,6 +12,7 @@ public class Time {
 	private int saldo_gols;
 	private int ca;
 	private int cv;
+	private int aproveitamento;
 	
 	public int getNumero_time() {
 		return numero_time;
@@ -78,6 +79,12 @@ public class Time {
 	}
 	public void setCv(int cv) {
 		this.cv = cv;
+	}
+	public int getAproveitamento() {
+		return aproveitamento;
+	}
+	public void setAproveitamento(int aproveitamento) {
+		this.aproveitamento = aproveitamento;
 	}
 	
 }

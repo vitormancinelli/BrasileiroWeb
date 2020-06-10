@@ -110,6 +110,7 @@ public class BrasileiroController {
 		try {
 			BancoDeDados bd = new BancoDeDados();
 			bd.sortearResultados();
+			bd.calculoAproveitamento();
 			return "SortearResultados";
 		} catch (Exception e) {
 			model.addAttribute("erro", e.getMessage());

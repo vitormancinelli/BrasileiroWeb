@@ -227,6 +227,7 @@ public class BancoDeDados {
 		Statement stmt2 = null;
 		Statement stmt3 = null;
 		Statement stmt4 = null;
+		
 		try {
 			Connection conn = getConnection();
 			Random r = new Random();
@@ -309,6 +310,30 @@ public class BancoDeDados {
 			throw new Exception("Erro ao Sortear Resultados.");
 		}
 	}
+	
+	public void calculoAproveitamento() throws Exception {
+		ResultSet rs = null;
+		Statement stmt = null;
+		Statement stmt2 = null;
+		double aproveitamento;
+		
+		try {
+			Connection conn = getConnection();
+			String query = "SELECT * FROM `brasileiro`.`time`";
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(query);
+			while(rs.next()) {
+				aproveitamento = (rs.getInt("pontos")* 100 / 114);
+				
+				query = "UPDATE `brasileiro`.`time` SET `aproveitamento` = " + aproveitamento + " WHERE (`numero_time` = " + rs.getInt("numero_time") + ");";
+				stmt2 = conn.createStatement();
+				stmt2.executeUpdate(query);
+			}
+		} catch(Exception e) {
+			System.out.println("Erro: " + e.getMessage());
+			throw new Exception("Erro ao Calcular o Aproveitamento.");
+		}
+	}
 
 	public ArrayList<Time> mostrarClassificaçao() throws Exception {
 		ArrayList<Time> lista = new ArrayList<Time>();
@@ -329,6 +354,7 @@ public class BancoDeDados {
 				t.setGols_pro(rs.getInt("gols_pro"));
 				t.setGols_contra(rs.getInt("gols_contra"));
 				t.setSaldo_gols(rs.getInt("saldo_gols"));
+				t.setAproveitamento(rs.getInt("aproveitamento"));
 				
 				lista.add(t);
 				System.out.println("time: " + rs.getString("nome_time") + "  pontos: " + rs.getInt("pontos")
