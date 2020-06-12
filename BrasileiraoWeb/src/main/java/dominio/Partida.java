@@ -1,4 +1,4 @@
-package servico;
+package dominio;
 
 public class Partida {
 	private int numero_rodada;

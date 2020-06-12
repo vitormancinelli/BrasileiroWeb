@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import dominio.Time;
 import servico.BancoDeDados;
-import servico.Time;
 
 @Controller
 public class BrasileiroController {

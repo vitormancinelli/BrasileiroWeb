@@ -10,6 +10,9 @@ import java.util.Random;
 
 import org.springframework.beans.factory.ListableBeanFactory;
 
+import dominio.Partida;
+import dominio.Time;
+
 public class BancoDeDados {
 
 	public Connection getConnection() {

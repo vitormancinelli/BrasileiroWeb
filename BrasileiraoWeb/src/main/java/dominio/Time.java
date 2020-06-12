@@ -1,4 +1,4 @@
-package servico;
+package dominio;
 
 public class Time {
 	private int numero_time;
