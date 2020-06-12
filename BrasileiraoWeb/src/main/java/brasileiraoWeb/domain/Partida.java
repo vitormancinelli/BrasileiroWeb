@@ -1,4 +1,4 @@
-package dominio;
+package brasileiraoWeb.domain;
 
 public class Partida {
 	private int numero_rodada;

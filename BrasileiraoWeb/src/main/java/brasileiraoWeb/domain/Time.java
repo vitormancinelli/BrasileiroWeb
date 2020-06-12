@@ -1,4 +1,4 @@
-package dominio;
+package brasileiraoWeb.domain;
 
 public class Time {
 	private int numero_time;
