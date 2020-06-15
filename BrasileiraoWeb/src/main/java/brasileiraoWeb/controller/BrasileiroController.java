@@ -14,10 +14,14 @@ public class BrasileiroController {
 	
 	@GetMapping("/CadastrarCampeonato")
 	public String CadastrarCampeonato(Model model) {
+		BancoDeDados bd = new BancoDeDados();
 		try {
-			BancoDeDados bd = new BancoDeDados();
-			bd.cadastrarCampeonato();
-			return "CadastrarCampeonato";
+			if (bd.contarTimes() == 20) {
+				bd.cadastrarCampeonato();
+				return "CadastrarCampeonato";
+			} else {
+				return "ErroNumeroTimes";
+			}
 		} catch (Exception e) {
 			model.addAttribute("erro", e.getMessage());
 			return "Erro";

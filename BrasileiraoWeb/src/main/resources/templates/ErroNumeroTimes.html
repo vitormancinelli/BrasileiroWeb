@@ -8,34 +8,28 @@
 		<h1>Projeto TI São Judas</h1>
 		<h2>Simulação Campeonato Brasileiro</h2>
 	</div>
-		
-	<div><p> Cadastrar Time </p></div>
 	
-	<div class="container-XL">
-		<div class="row-2">
-			<div class="col-sm-4 col-md-3 col-lg-3 col-xl-3 p-1">
-				<form action="#" th:action="@{/CadastrarTime}" th:object="${time}" method="post">
-					<p>Nome: <input type="text" th:field="*{nome_time}" th:value="${time.nome_time}" placeholder="nome do time" required></p> 
-					<p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
-				</form> 
-			</div>	
-		</div>
-	</div>
+	<div class="alert alert-warning alert-dismissible fade show" role="alert">
+  		<strong>Numero de time inválido para começar um campeonato</strong>, caso deseje iniciar um campeonato, é necessário 20 times.
+  		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    		<span aria-hidden="true">&times;</span>
+  		</button>
+  	</div>
 	
 	<div class="container-XL">
 		<div class="row-2">
 			<div class="col-sm-4 col-md-3 col-lg-3 col-xl-3 p-1">
 	 			<ul class="list-group">
 	 				<li><a href="/" class="list-group-item list-group-item-action list-group-item-success p-1"><i class="fas fa-home px-3"></i>Home</a></li>
+	        		<li><a href="/CadastrarTime" class="list-group-item list-group-item-action list-group-item-success p-1"><i class="fa fa-plus px-3"></i>Cadastrar Time</a></li>
 	        		<li><a href="/LimparTime" class="list-group-item list-group-item-action list-group-item-success p-1"><i class="fa fa-trash px-3"></i>Limpar Time</a></li>
 	        		<li><a href="/ListarTime" class="list-group-item list-group-item-action list-group-item-success p-1"><i class="far fa-list-alt px-3"></i>Listar Time</a></li>
-	       			<li><a href="/SortearTimes" class="list-group-item list-group-item-action list-group-item-success p-1"><i class="fa fa-random px-3"></i>Sortear Times</a></li>
 				</ul>
 			</div>
 		</div>
-	</div>	
-		
-	<div th:replace="fragments/script :: script">...</div> 
+	</div>
 	
+	<div th:replace="fragments/script :: script">...</div>
+		
 </body>
 </html>

@@ -105,15 +105,14 @@ public class BancoDeDados {
 		Statement stmt = null;
 		try {
 			limparCampeonato();
-			
 			Connection conn = getConnection();
 			String query = "INSERT INTO campeonato (qtd_turnos, qtd_rodadas, qtd_partidas, qtd_clubes) VALUES ('"
-					+ turno + "', '" + rodada + "', '" + partida + "', '" + clubes + "')";
-			stmt = conn.createStatement();
+				+ turno + "', '" + rodada + "', '" + partida + "', '" + clubes + "')";
+			conn.createStatement();
 			stmt.executeUpdate(query);
 		} catch (Exception e) {
 			System.out.println("Erro: " + e.getMessage());
-			throw new Exception("Erro ao Cadastrar Campeonato.");
+			throw new Exception("Erro ao Cadastrar Campeonato.");	
 		}
 	}
 	
