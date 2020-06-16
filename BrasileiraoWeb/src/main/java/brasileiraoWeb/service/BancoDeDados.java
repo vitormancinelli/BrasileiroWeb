@@ -108,7 +108,7 @@ public class BancoDeDados {
 			Connection conn = getConnection();
 			String query = "INSERT INTO campeonato (qtd_turnos, qtd_rodadas, qtd_partidas, qtd_clubes) VALUES ('"
 				+ turno + "', '" + rodada + "', '" + partida + "', '" + clubes + "')";
-			conn.createStatement();
+			stmt = conn.createStatement();
 			stmt.executeUpdate(query);
 		} catch (Exception e) {
 			System.out.println("Erro: " + e.getMessage());
