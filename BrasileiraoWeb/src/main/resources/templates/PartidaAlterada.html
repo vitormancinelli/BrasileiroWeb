@@ -9,21 +9,24 @@
 		<h2>Simulação Campeonato Brasileiro</h2>
 	</div>
 	
-	<div><p> Sorteio realizado </p></div>
+	<div>
+		Partida Alterada
+	</div>
 	
 	<div class="container-XL">
 		<div class="row-2">
 			<div class="col-sm-4 col-md-3 col-lg-3 col-xl-3 p-1">
 	 			<ul class="list-group">
 	 				<li><a href="/" class="list-group-item list-group-item-action list-group-item-success p-1"><i class="fas fa-home px-3"></i>Home</a></li>
+	        		<li><a href="/AlterarPartida" class="list-group-item list-group-item-action list-group-item-success p-1"><i class="fa fa-plus px-3"></i>Alterar Partida</a></li>
 	        		<li><a href="/ListarPartidas" class="list-group-item list-group-item-action list-group-item-success p-1"><i class="far fa-list-alt px-3"></i>Listar Partidas</a></li>
-	        		<li><a href="/SortearResultados" class="list-group-item list-group-item-action list-group-item-success p-1"><i class="fa fa-random px-3"></i>Sortear Resultados</a></li>
+					<li><a href="/VerResultados" class="list-group-item list-group-item-action list-group-item-success p-1"><i class="fa fa-table px-3"></i>Ver Resultados</a></li> 
 				</ul>
 			</div>
 		</div>
-	</div>	
+	</div>
 	
 	<div th:replace="fragments/script :: script">...</div> 
-		
+	
 </body>
 </html>

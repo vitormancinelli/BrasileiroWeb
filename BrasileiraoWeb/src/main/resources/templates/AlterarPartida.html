@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body style="background-color:#D3D3D3">
+	<div style="background-color:#228B22;border:4px solid #000000;text-align:center">
+		<h1>Projeto TI São Judas</h1>
+		<h2>Simulação Campeonato Brasileiro</h2>
+	</div>
+		
+	<div><p> Alterar Resultado Partida </p></div>
+	
+	<div class="container-XL">
+		<div class="row-2">
+			<div class="col-sm-4 col-md-3 col-lg-3 col-xl-3 p-1">
+				<form action="#" th:action="@{/AlterarPartida}" th:object="${partida}" method="post">
+					<p>Numero da Partida: <input type="text" th:field="*{numero_partida}" th:value="${partida.numero_partida}" placeholder="numero da partida" required></p>
+					<p>Numero de Gols Time A: <input type="text" th:field="*{gols_a}" th:value="${partida.gols_a}" placeholder="gols do time A" required></p> 
+					<p>Numero de Gols Time B: <input type="text" th:field="*{gols_b}" th:value="${partida.gols_b}" placeholder="gols do time B" required></p> 
+					<p>Numero de Cartões Amarelos Time A: <input type="text" th:field="*{ca_a}" th:value="${partida.ca_a}" placeholder="cartões amarelos time A" required></p> 
+					<p>Numero de Cartões Amarelos Time B: <input type="text" th:field="*{ca_b}" th:value="${partida.ca_b}" placeholder="cartões amarelos time B" required></p> 
+					<p>Numero de Cartões Vermelhos Time A: <input type="text" th:field="*{cv_a}" th:value="${partida.cv_a}" placeholder="carões vermelhos time A" required></p> 
+					<p>Numero de Cartões Vermelhos Time B: <input type="text" th:field="*{cv_b}" th:value="${partida.cv_b}" placeholder="cartões vermelhos time B" required></p>  
+					<p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
+				</form> 
+			</div>	
+		</div>
+	</div>
+	
+	<div class="container-XL">
+		<div class="row-2">
+			<div class="col-sm-4 col-md-3 col-lg-3 col-xl-3 p-1">
+	 			<ul class="list-group">
+	 				<li><a href="/" class="list-group-item list-group-item-action list-group-item-success p-1"><i class="fas fa-home px-3"></i>Home</a></li>
+	        		<li><a href="/ListarPartidas" class="list-group-item list-group-item-action list-group-item-success p-1"><i class="far fa-list-alt px-3"></i>Listar Partidas</a></li>
+					<li><a href="/VerResultados" class="list-group-item list-group-item-action list-group-item-success p-1"><i class="fa fa-table px-3"></i>Ver Resultados</a></li>  
+				</ul>
+			</div>
+		</div>
+	</div>	
+		
+	<div th:replace="fragments/script :: script">...</div> 
+	
+</body>
+</html>

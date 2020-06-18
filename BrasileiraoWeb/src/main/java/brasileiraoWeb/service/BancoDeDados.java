@@ -31,7 +31,129 @@ public class BancoDeDados {
 		return conn;
 	}
 
-	public void listarCampeonatos() {
+	public void alterarPartida(int partida, int gols_a, int gols_b, int ca_a, int ca_b, int cv_a, int cv_b)
+			throws Exception {
+		Statement stmt = null;
+		ResultSet rs = null;
+		try {
+			Connection conn = getConnection();
+			String query = "SELECT * FROM partida WHERE numero_partida = " + partida + ";";
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(query);
+			rs.next();
+
+			Time timeA = new Time();
+			Time timeB = new Time();
+			timeA.setNumero_time(rs.getInt("time_a"));
+			timeB.setNumero_time(rs.getInt("time_b"));
+
+			int golsA = gols_a - rs.getInt("gols_a");
+			int golsB = gols_b - rs.getInt("gols_b");
+			int indice = golsA - golsB;
+			
+			if (indice > 0) {
+				timeA.setSaldo_gols(indice);
+				timeB.setSaldo_gols(-indice);
+			} else if (indice < 0) {
+				timeA.setSaldo_gols(-indice);
+				timeB.setSaldo_gols(indice);
+			} else {
+				timeA.setSaldo_gols(0);
+				timeB.setSaldo_gols(0);
+			}
+
+			timeA.setCa(ca_a - rs.getInt("ca_a"));
+			timeA.setCv(cv_a - rs.getInt("cv_a"));
+			timeB.setCa(ca_b - rs.getInt("ca_b"));
+			timeB.setCv(cv_b - rs.getInt("cv_b"));
+
+			timeA.setPontos(0);
+			timeB.setPontos(0);
+			timeA.setEmpates(0);
+			timeB.setEmpates(0);
+			timeA.setVitorias(0);
+			timeB.setVitorias(0);
+			timeA.setDerrotas(0);
+			timeB.setDerrotas(0);
+
+			if (gols_a > gols_b) {
+				if (rs.getInt("gols_a") > rs.getInt("gols_b")) { // time A venceu nos dois jogos
+				} else if (rs.getInt("gols_a") < rs.getInt("gols_b")) { // time A perdeu 1ª e venceu 2ª
+					timeA.setPontos(3);
+					timeB.setPontos(-3);
+					timeA.setVitorias(1);
+					timeB.setVitorias(-1);
+					timeA.setDerrotas(-1);
+					timeB.setDerrotas(1);
+				} else if (rs.getInt("gols_a") == rs.getInt("gols_b")) { // time A empatou 1ª e venceu 2ª
+					timeA.setPontos(2);
+					timeB.setPontos(-1);
+					timeA.setVitorias(1);
+					timeB.setDerrotas(1);
+					timeA.setEmpates(-1);
+					timeB.setEmpates(-1);
+				}
+			} else if (gols_a < gols_b) {
+				if (rs.getInt("gols_a") > rs.getInt("gols_b")) { // time A venceu 1ª e perdeu 2ª
+					timeA.setPontos(-3);
+					timeB.setPontos(3);
+					timeA.setVitorias(-1);
+					timeB.setVitorias(1);
+					timeA.setDerrotas(1);
+					timeB.setDerrotas(-1);
+				} else if (rs.getInt("gols_a") < rs.getInt("gols_b")) { // time A perdeu os 2ª
+				} else if (rs.getInt("gols_a") == rs.getInt("gols_b")) { // time A empatou 1ª e perdeu 2ª
+					timeA.setPontos(-1);
+					timeB.setPontos(2);
+					timeB.setVitorias(1);
+					timeA.setDerrotas(1);
+					timeA.setEmpates(-1);
+					timeB.setEmpates(-1);
+				}
+			} else if (gols_a == gols_b) {
+				if (rs.getInt("gols_a") > rs.getInt("gols_b")) { // time A venceu 1ª e empatou 2ª
+					timeA.setPontos(-2);
+					timeB.setPontos(1);
+					timeA.setVitorias(-1);
+					timeB.setDerrotas(-1);
+					timeA.setEmpates(1);
+					timeB.setEmpates(1);
+				} else if (rs.getInt("gols_a") < rs.getInt("gols_b")) { // time A perdeu 1ª e empatou 2ª
+					timeA.setPontos(1);
+					timeB.setPontos(-2);
+					timeB.setVitorias(-1);
+					timeA.setDerrotas(-1);
+					timeA.setEmpates(1);
+					timeB.setEmpates(1);
+				} else if (rs.getInt("gols_a") == rs.getInt("gols_b")) {
+				}
+			}
+
+			query = "UPDATE partida SET gols_a = " + gols_a + ", gols_b = " + gols_b + ", ca_a = " + ca_a + ", ca_b = "
+					+ ca_b + ", cv_a = " + cv_a + ", cv_b = " + cv_b + " WHERE numero_partida = " + partida + ";";
+			stmt.executeUpdate(query);
+
+			query = "UPDATE time SET pontos = pontos + " + timeA.getPontos() + ", vitorias = vitorias + "
+					+ timeA.getVitorias() + ", derrotas = derrotas + " + timeA.getDerrotas() + ", empates = empates + "
+					+ timeA.getEmpates() + ", gols_pro = gols_pro + " + golsA + ", gols_contra = gols_contra + " + golsB
+					+ ", saldo_gols = saldo_gols + " + timeA.getSaldo_gols() + ", ca = ca + " + timeA.getCa()
+					+ ", cv = cv + " + timeA.getCv() + " WHERE numero_time = " + timeA.getNumero_time() + ";";
+			stmt.executeUpdate(query);
+
+			query = "UPDATE time SET pontos = pontos + " + timeB.getPontos() + ", vitorias = vitorias + "
+					+ timeB.getVitorias() + ", derrotas = derrotas + " + timeB.getDerrotas() + ", empates = empates + "
+					+ timeB.getEmpates() + ", gols_pro = gols_pro + " + golsB + ", gols_contra = gols_contra + " + golsA
+					+ ", saldo_gols = saldo_gols + " + timeB.getSaldo_gols() + ", ca = ca + " + timeB.getCa()
+					+ ", cv = cv + " + timeB.getCv() + " WHERE numero_time = " + timeB.getNumero_time() + ";";
+			stmt.executeUpdate(query);
+
+		} catch (Exception e) {
+			System.out.println("Erro: " + e.getMessage());
+			throw new Exception("Erro ao Alterar Partida.");
+		}
+	}
+
+	public void listarCampeonatos() throws Exception {
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
@@ -47,6 +169,7 @@ public class BancoDeDados {
 			}
 		} catch (Exception e) {
 			System.out.println("Erro: " + e.getMessage());
+			throw new Exception("Erro ao lista Campeonato.");
 		}
 	}
 
@@ -63,10 +186,10 @@ public class BancoDeDados {
 				Time t = new Time();
 				t.setNome_time(rs.getString("nome_time"));
 				t.setNumero_time(rs.getInt("numero_time"));
-				
+
 				lista.add(t);
 				System.out.println("time " + rs.getInt("numero_time") + ": " + rs.getString("nome_time"));
-			} 
+			}
 		} catch (Exception e) {
 			System.out.println("Erro: " + e.getMessage());
 			throw new Exception("Erro ao lista times.");
@@ -107,15 +230,15 @@ public class BancoDeDados {
 			limparCampeonato();
 			Connection conn = getConnection();
 			String query = "INSERT INTO campeonato (qtd_turnos, qtd_rodadas, qtd_partidas, qtd_clubes) VALUES ('"
-				+ turno + "', '" + rodada + "', '" + partida + "', '" + clubes + "')";
+					+ turno + "', '" + rodada + "', '" + partida + "', '" + clubes + "')";
 			stmt = conn.createStatement();
 			stmt.executeUpdate(query);
 		} catch (Exception e) {
 			System.out.println("Erro: " + e.getMessage());
-			throw new Exception("Erro ao Cadastrar Campeonato.");	
+			throw new Exception("Erro ao Cadastrar Campeonato.");
 		}
 	}
-	
+
 	public int contarTimes() throws Exception {
 		Statement stmt = null;
 		ResultSet rs = null;
@@ -229,7 +352,7 @@ public class BancoDeDados {
 		Statement stmt2 = null;
 		Statement stmt3 = null;
 		Statement stmt4 = null;
-		
+
 		try {
 			Connection conn = getConnection();
 			Random r = new Random();
@@ -246,7 +369,7 @@ public class BancoDeDados {
 			int derrotaB;
 			int pontosA;
 			int pontosB;
-			
+
 			String query = "SELECT * FROM time;";
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery(query);
@@ -286,27 +409,27 @@ public class BancoDeDados {
 						pontosA = 1;
 						pontosB = 1;
 					}
-	
+
 					query = "UPDATE `brasileiro`.`partida` SET `gols_a` = '" + golsA + "', `gols_b` = '" + golsB
-							+ "', `ca_a` = '" + caA + "', `ca_b` = '" + caB + "', `cv_a` = '" + cvA + "', `cv_b` = '" + cvB
-							+ "' WHERE (numero_partida = " + rs.getInt("numero_partida") + ");";
+							+ "', `ca_a` = '" + caA + "', `ca_b` = '" + caB + "', `cv_a` = '" + cvA + "', `cv_b` = '"
+							+ cvB + "' WHERE (numero_partida = " + rs.getInt("numero_partida") + ");";
 					stmt2 = conn.createStatement();
 					stmt2.executeUpdate(query);
-	
+
 					query = "UPDATE `brasileiro`.`time` SET `gols_pro` = `gols_pro` + " + golsA
 							+ ", `gols_contra` = `gols_contra` + " + golsB
-							+ ", `saldo_gols` = `gols_pro` - `gols_contra`, `ca` = `ca` + " + caA + ", `cv` = `cv` + " + cvA
-							+ ", `vitorias` = `vitorias` + " + vitoriaA + ", `derrotas` = `derrotas` + " + derrotaA
-							+ ", `empates` = `empates` + " + empate + ", `pontos` = `pontos` + " + pontosA
+							+ ", `saldo_gols` = `gols_pro` - `gols_contra`, `ca` = `ca` + " + caA + ", `cv` = `cv` + "
+							+ cvA + ", `vitorias` = `vitorias` + " + vitoriaA + ", `derrotas` = `derrotas` + "
+							+ derrotaA + ", `empates` = `empates` + " + empate + ", `pontos` = `pontos` + " + pontosA
 							+ "  WHERE (numero_time = " + rs.getInt("time_a") + ");";
 					stmt3 = conn.createStatement();
 					stmt3.executeUpdate(query);
-	
+
 					query = "UPDATE `brasileiro`.`time` SET `gols_pro` = `gols_pro` + " + golsB
 							+ ", `gols_contra` = `gols_contra` + " + golsA
-							+ ", `saldo_gols` = `gols_pro` - `gols_contra`, `ca` = `ca` + " + caB + ", `cv` = `cv` + " + cvB
-							+ ", `vitorias` = `vitorias` + " + vitoriaB + ", `derrotas` = `derrotas` + " + derrotaB
-							+ ", `empates` = `empates` + " + empate + ", `pontos` = `pontos` + " + pontosB
+							+ ", `saldo_gols` = `gols_pro` - `gols_contra`, `ca` = `ca` + " + caB + ", `cv` = `cv` + "
+							+ cvB + ", `vitorias` = `vitorias` + " + vitoriaB + ", `derrotas` = `derrotas` + "
+							+ derrotaB + ", `empates` = `empates` + " + empate + ", `pontos` = `pontos` + " + pontosB
 							+ "  WHERE (numero_time = " + rs.getInt("time_b") + ");";
 					stmt4 = conn.createStatement();
 					stmt4.executeUpdate(query);
@@ -317,26 +440,27 @@ public class BancoDeDados {
 			throw new Exception("Erro ao Sortear Resultados.");
 		}
 	}
-	
+
 	public void calculoAproveitamento() throws Exception {
 		ResultSet rs = null;
 		Statement stmt = null;
 		Statement stmt2 = null;
 		double aproveitamento;
-		
+
 		try {
 			Connection conn = getConnection();
 			String query = "SELECT * FROM `brasileiro`.`time`";
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery(query);
-			while(rs.next()) {
-				aproveitamento = (rs.getInt("pontos")* 100 / 114);
-				
-				query = "UPDATE `brasileiro`.`time` SET `aproveitamento` = " + aproveitamento + " WHERE (`numero_time` = " + rs.getInt("numero_time") + ");";
+			while (rs.next()) {
+				aproveitamento = (rs.getInt("pontos") * 100 / 114);
+
+				query = "UPDATE `brasileiro`.`time` SET `aproveitamento` = " + aproveitamento
+						+ " WHERE (`numero_time` = " + rs.getInt("numero_time") + ");";
 				stmt2 = conn.createStatement();
 				stmt2.executeUpdate(query);
 			}
-		} catch(Exception e) {
+		} catch (Exception e) {
 			System.out.println("Erro: " + e.getMessage());
 			throw new Exception("Erro ao Calcular o Aproveitamento.");
 		}
@@ -362,7 +486,7 @@ public class BancoDeDados {
 				t.setGols_contra(rs.getInt("gols_contra"));
 				t.setSaldo_gols(rs.getInt("saldo_gols"));
 				t.setAproveitamento(rs.getInt("aproveitamento"));
-				
+
 				lista.add(t);
 				System.out.println("time: " + rs.getString("nome_time") + "  pontos: " + rs.getInt("pontos")
 						+ "  vitorias: " + rs.getInt("vitorias") + "  derrotas: " + rs.getInt("derrotas")
@@ -397,7 +521,7 @@ public class BancoDeDados {
 				p.setNumero_partida(rs.getInt("numero_partida"));
 				p.setTime_a(t1);
 				p.setTime_b(t2);
-				
+
 				lista.add(p);
 				System.out.println("numero rodada: " + rs.getInt("numero_rodada") + "  numero partida: "
 						+ rs.getInt("numero_partida") + "  " + rs.getString("time1") + "  x  " + rs.getString("time2"));
@@ -410,7 +534,7 @@ public class BancoDeDados {
 	}
 
 	public String mostrarVencedores() throws Exception {
-		String lista= "";
+		String lista = "";
 		Time t = new Time();
 		String query;
 		ResultSet rs = null;
@@ -444,7 +568,7 @@ public class BancoDeDados {
 				rs2 = stmt2.executeQuery(query);
 				if (rs2.next()) {
 					t.setNome_time(rs2.getString("nome_time"));
-					
+
 					lista = t.getNome_time();
 					System.out.println("time campeão: " + rs2.getString("nome_time"));
 				} else {
@@ -492,22 +616,22 @@ public class BancoDeDados {
 					String timeB = rs.getString("nome_time");
 					if (vitoriaA == 0 && empate == 0 && partida == 2) { // 2 vitorias B
 						t.setNome_time(timeB);
-						
+
 						lista = t.getNome_time();
 						System.out.println("time campeão: " + timeB);
 					} else if (vitoriaA == 2 && empate == 0 && partida == 2) { // 2 vitorias A
 						t.setNome_time(timeA);
-						
+
 						lista = t.getNome_time();
 						System.out.println("time campeão: " + timeA);
 					} else if (vitoriaA == 1 && empate == 1 && partida == 2) { // 1 vitoria A e 1 empate
 						t.setNome_time(timeA);
-						
+
 						lista = t.getNome_time();
 						System.out.println("time campeão: " + timeA);
 					} else if (vitoriaA == 0 && empate == 1 && partida == 2) { // 1 vitoria B e 1 empate
 						t.setNome_time(timeB);
-						
+
 						lista = t.getNome_time();
 						System.out.println("time campeão: " + timeB);
 					} else if (vitoriaA == 1 && empate == 0 && partida == 2) { // 1 vitoria A e 1 vitoria B
@@ -515,7 +639,7 @@ public class BancoDeDados {
 						rs2 = stmt2.executeQuery(query);
 						rs2.next();
 						t.setNome_time(rs2.getString("nome_time"));
-						
+
 						lista = t.getNome_time();
 						System.out.println("time campeão: " + rs2.getString("nome_time"));
 					} else if (vitoriaA == 0 && empate == 2 && partida == 2) { // 2 empates
@@ -523,7 +647,7 @@ public class BancoDeDados {
 						rs2 = stmt2.executeQuery(query);
 						rs2.next();
 						t.setNome_time(rs2.getString("nome_time"));
-						
+
 						lista = t.getNome_time();
 						System.out.println("time campeão: " + rs2.getString("nome_time"));
 					}
@@ -533,7 +657,7 @@ public class BancoDeDados {
 				rs2 = stmt2.executeQuery(query);
 				rs2.next();
 				t.setNome_time(rs2.getString("nome_time"));
-				
+
 				lista = t.getNome_time();
 				System.out.println("time campeão: " + rs2.getString("nome_time"));
 			}

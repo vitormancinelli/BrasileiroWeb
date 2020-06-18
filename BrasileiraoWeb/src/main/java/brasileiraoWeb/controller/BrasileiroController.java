@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import brasileiraoWeb.domain.Partida;
 import brasileiraoWeb.domain.Time;
 import brasileiraoWeb.service.BancoDeDados;
 
@@ -26,6 +27,25 @@ public class BrasileiroController {
 			model.addAttribute("erro", e.getMessage());
 			return "Erro";
 		}
+	}
+	
+	@GetMapping("/AlterarPartida")
+	public String AlterarPartida(Model model) {
+		model.addAttribute("partida", new Partida());
+		return "AlterarPartida";
+	}
+	
+	@PostMapping("/AlterarPartida")
+	public String PartidaAlterada(Model model, Partida partida) {
+		BancoDeDados bd = new BancoDeDados();
+			try {
+				bd.alterarPartida(partida.getNumero_partida(), partida.getGols_a(), partida.getGols_b(), partida.getCa_a(), partida.getCa_b(), partida.getCv_a(), partida.getCv_b());
+				bd.calculoAproveitamento();
+			} catch (Exception e) {
+				model.addAttribute("erro", e.getMessage());
+				return "Erro";
+			}
+		return "PartidaAlterada";
 	}
 	
 	@GetMapping("/CadastrarTime")
