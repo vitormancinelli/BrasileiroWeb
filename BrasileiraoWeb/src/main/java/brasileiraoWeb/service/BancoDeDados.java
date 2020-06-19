@@ -8,8 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import org.springframework.beans.factory.ListableBeanFactory;
-
 import brasileiraoWeb.domain.Partida;
 import brasileiraoWeb.domain.Time;
 
