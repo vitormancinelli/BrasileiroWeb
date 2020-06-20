@@ -29,122 +29,133 @@ public class BancoDeDados {
 		return conn;
 	}
 
-	public void alterarPartida(int partida, int gols_a, int gols_b, int ca_a, int ca_b, int cv_a, int cv_b)
-			throws Exception {
+	public void alterarPartida(int partida, int gols_a, int gols_b, int ca_a, int ca_b, int cv_a, int cv_b) throws Exception {
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
-			Connection conn = getConnection();
-			String query = "SELECT * FROM partida WHERE numero_partida = " + partida + ";";
-			stmt = conn.createStatement();
-			rs = stmt.executeQuery(query);
-			rs.next();
-
-			Time timeA = new Time();
-			Time timeB = new Time();
-			timeA.setNumero_time(rs.getInt("time_a"));
-			timeB.setNumero_time(rs.getInt("time_b"));
-
-			int golsA = gols_a - rs.getInt("gols_a");
-			int golsB = gols_b - rs.getInt("gols_b");
-			int indice = golsA - golsB;
-			
-			if (indice > 0) {
-				timeA.setSaldo_gols(indice);
-				timeB.setSaldo_gols(-indice);
-			} else if (indice < 0) {
-				timeA.setSaldo_gols(-indice);
-				timeB.setSaldo_gols(indice);
+			if (gols_a >= 0 && gols_b >= 0 && ca_a >= 0 && ca_b >= 0 && cv_a >= 0 && cv_b >= 0) {
+				if (partida < 380 && partida > 0) {
+					Connection conn = getConnection();
+					String query = "SELECT * FROM partida WHERE numero_partida = " + partida + ";";
+					stmt = conn.createStatement();
+					rs = stmt.executeQuery(query);
+					rs.next();
+	
+					Time timeA = new Time();
+					Time timeB = new Time();
+					timeA.setNumero_time(rs.getInt("time_a"));
+					timeB.setNumero_time(rs.getInt("time_b"));
+	
+					int golsA = gols_a - rs.getInt("gols_a");
+					int golsB = gols_b - rs.getInt("gols_b");
+					int indice = golsA - golsB;
+	
+					if (indice > 0) {
+						timeA.setSaldo_gols(indice);
+						timeB.setSaldo_gols(-indice);
+					} else if (indice < 0) {
+						timeA.setSaldo_gols(-indice);
+						timeB.setSaldo_gols(indice);
+					} else {
+						timeA.setSaldo_gols(0);
+						timeB.setSaldo_gols(0);
+					}
+	
+					timeA.setCa(ca_a - rs.getInt("ca_a"));
+					timeA.setCv(cv_a - rs.getInt("cv_a"));
+					timeB.setCa(ca_b - rs.getInt("ca_b"));
+					timeB.setCv(cv_b - rs.getInt("cv_b"));
+	
+					timeA.setPontos(0);
+					timeB.setPontos(0);
+					timeA.setEmpates(0);
+					timeB.setEmpates(0);
+					timeA.setVitorias(0);
+					timeB.setVitorias(0);
+					timeA.setDerrotas(0);
+					timeB.setDerrotas(0);
+	
+					if (gols_a > gols_b) {
+						if (rs.getInt("gols_a") > rs.getInt("gols_b")) { // time A venceu nos dois jogos
+						} else if (rs.getInt("gols_a") < rs.getInt("gols_b")) { // time A perdeu 1ª e venceu 2ª
+							timeA.setPontos(3);
+							timeB.setPontos(-3);
+							timeA.setVitorias(1);
+							timeB.setVitorias(-1);
+							timeA.setDerrotas(-1);
+							timeB.setDerrotas(1);
+						} else if (rs.getInt("gols_a") == rs.getInt("gols_b")) { // time A empatou 1ª e venceu 2ª
+							timeA.setPontos(2);
+							timeB.setPontos(-1);
+							timeA.setVitorias(1);
+							timeB.setDerrotas(1);
+							timeA.setEmpates(-1);
+							timeB.setEmpates(-1);
+						}
+					} else if (gols_a < gols_b) {
+						if (rs.getInt("gols_a") > rs.getInt("gols_b")) { // time A venceu 1ª e perdeu 2ª
+							timeA.setPontos(-3);
+							timeB.setPontos(3);
+							timeA.setVitorias(-1);
+							timeB.setVitorias(1);
+							timeA.setDerrotas(1);
+							timeB.setDerrotas(-1);
+						} else if (rs.getInt("gols_a") < rs.getInt("gols_b")) { // time A perdeu os 2ª
+						} else if (rs.getInt("gols_a") == rs.getInt("gols_b")) { // time A empatou 1ª e perdeu 2ª
+							timeA.setPontos(-1);
+							timeB.setPontos(2);
+							timeB.setVitorias(1);
+							timeA.setDerrotas(1);
+							timeA.setEmpates(-1);
+							timeB.setEmpates(-1);
+						}
+					} else if (gols_a == gols_b) {
+						if (rs.getInt("gols_a") > rs.getInt("gols_b")) { // time A venceu 1ª e empatou 2ª
+							timeA.setPontos(-2);
+							timeB.setPontos(1);
+							timeA.setVitorias(-1);
+							timeB.setDerrotas(-1);
+							timeA.setEmpates(1);
+							timeB.setEmpates(1);
+						} else if (rs.getInt("gols_a") < rs.getInt("gols_b")) { // time A perdeu 1ª e empatou 2ª
+							timeA.setPontos(1);
+							timeB.setPontos(-2);
+							timeB.setVitorias(-1);
+							timeA.setDerrotas(-1);
+							timeA.setEmpates(1);
+							timeB.setEmpates(1);
+						} else if (rs.getInt("gols_a") == rs.getInt("gols_b")) {
+						}
+					}
+	
+					query = "UPDATE partida SET gols_a = " + gols_a + ", gols_b = " + gols_b + ", ca_a = " + ca_a
+							+ ", ca_b = " + ca_b + ", cv_a = " + cv_a + ", cv_b = " + cv_b + " WHERE numero_partida = "
+							+ partida + ";";
+					stmt.executeUpdate(query);
+	
+					query = "UPDATE time SET pontos = pontos + " + timeA.getPontos() + ", vitorias = vitorias + "
+							+ timeA.getVitorias() + ", derrotas = derrotas + " + timeA.getDerrotas()
+							+ ", empates = empates + " + timeA.getEmpates() + ", gols_pro = gols_pro + " + golsA
+							+ ", gols_contra = gols_contra + " + golsB + ", saldo_gols = saldo_gols + "
+							+ timeA.getSaldo_gols() + ", ca = ca + " + timeA.getCa() + ", cv = cv + " + timeA.getCv()
+							+ " WHERE numero_time = " + timeA.getNumero_time() + ";";
+					stmt.executeUpdate(query);
+	
+					query = "UPDATE time SET pontos = pontos + " + timeB.getPontos() + ", vitorias = vitorias + "
+							+ timeB.getVitorias() + ", derrotas = derrotas + " + timeB.getDerrotas()
+							+ ", empates = empates + " + timeB.getEmpates() + ", gols_pro = gols_pro + " + golsB
+							+ ", gols_contra = gols_contra + " + golsA + ", saldo_gols = saldo_gols + "
+							+ timeB.getSaldo_gols() + ", ca = ca + " + timeB.getCa() + ", cv = cv + " + timeB.getCv()
+							+ " WHERE numero_time = " + timeB.getNumero_time() + ";";
+					stmt.executeUpdate(query);
+				} else {
+					System.out.println("Erro: A partida a ser alterada não pode ser encontra, por favor insira um valor entre 0 e 380");
+					throw new Exception("Erro: A partida a ser alterada não pode ser encontra, por favor insira um valor entre 0 e 380");
+				}
 			} else {
-				timeA.setSaldo_gols(0);
-				timeB.setSaldo_gols(0);
+				System.out.println("Erro: Valor a ser alterado na tabela não pode ser menor que zero");
+				throw new Exception("Erro: Valor a ser alterado na tabela não pode ser menor que zero");
 			}
-
-			timeA.setCa(ca_a - rs.getInt("ca_a"));
-			timeA.setCv(cv_a - rs.getInt("cv_a"));
-			timeB.setCa(ca_b - rs.getInt("ca_b"));
-			timeB.setCv(cv_b - rs.getInt("cv_b"));
-
-			timeA.setPontos(0);
-			timeB.setPontos(0);
-			timeA.setEmpates(0);
-			timeB.setEmpates(0);
-			timeA.setVitorias(0);
-			timeB.setVitorias(0);
-			timeA.setDerrotas(0);
-			timeB.setDerrotas(0);
-
-			if (gols_a > gols_b) {
-				if (rs.getInt("gols_a") > rs.getInt("gols_b")) { // time A venceu nos dois jogos
-				} else if (rs.getInt("gols_a") < rs.getInt("gols_b")) { // time A perdeu 1ª e venceu 2ª
-					timeA.setPontos(3);
-					timeB.setPontos(-3);
-					timeA.setVitorias(1);
-					timeB.setVitorias(-1);
-					timeA.setDerrotas(-1);
-					timeB.setDerrotas(1);
-				} else if (rs.getInt("gols_a") == rs.getInt("gols_b")) { // time A empatou 1ª e venceu 2ª
-					timeA.setPontos(2);
-					timeB.setPontos(-1);
-					timeA.setVitorias(1);
-					timeB.setDerrotas(1);
-					timeA.setEmpates(-1);
-					timeB.setEmpates(-1);
-				}
-			} else if (gols_a < gols_b) {
-				if (rs.getInt("gols_a") > rs.getInt("gols_b")) { // time A venceu 1ª e perdeu 2ª
-					timeA.setPontos(-3);
-					timeB.setPontos(3);
-					timeA.setVitorias(-1);
-					timeB.setVitorias(1);
-					timeA.setDerrotas(1);
-					timeB.setDerrotas(-1);
-				} else if (rs.getInt("gols_a") < rs.getInt("gols_b")) { // time A perdeu os 2ª
-				} else if (rs.getInt("gols_a") == rs.getInt("gols_b")) { // time A empatou 1ª e perdeu 2ª
-					timeA.setPontos(-1);
-					timeB.setPontos(2);
-					timeB.setVitorias(1);
-					timeA.setDerrotas(1);
-					timeA.setEmpates(-1);
-					timeB.setEmpates(-1);
-				}
-			} else if (gols_a == gols_b) {
-				if (rs.getInt("gols_a") > rs.getInt("gols_b")) { // time A venceu 1ª e empatou 2ª
-					timeA.setPontos(-2);
-					timeB.setPontos(1);
-					timeA.setVitorias(-1);
-					timeB.setDerrotas(-1);
-					timeA.setEmpates(1);
-					timeB.setEmpates(1);
-				} else if (rs.getInt("gols_a") < rs.getInt("gols_b")) { // time A perdeu 1ª e empatou 2ª
-					timeA.setPontos(1);
-					timeB.setPontos(-2);
-					timeB.setVitorias(-1);
-					timeA.setDerrotas(-1);
-					timeA.setEmpates(1);
-					timeB.setEmpates(1);
-				} else if (rs.getInt("gols_a") == rs.getInt("gols_b")) {
-				}
-			}
-
-			query = "UPDATE partida SET gols_a = " + gols_a + ", gols_b = " + gols_b + ", ca_a = " + ca_a + ", ca_b = "
-					+ ca_b + ", cv_a = " + cv_a + ", cv_b = " + cv_b + " WHERE numero_partida = " + partida + ";";
-			stmt.executeUpdate(query);
-
-			query = "UPDATE time SET pontos = pontos + " + timeA.getPontos() + ", vitorias = vitorias + "
-					+ timeA.getVitorias() + ", derrotas = derrotas + " + timeA.getDerrotas() + ", empates = empates + "
-					+ timeA.getEmpates() + ", gols_pro = gols_pro + " + golsA + ", gols_contra = gols_contra + " + golsB
-					+ ", saldo_gols = saldo_gols + " + timeA.getSaldo_gols() + ", ca = ca + " + timeA.getCa()
-					+ ", cv = cv + " + timeA.getCv() + " WHERE numero_time = " + timeA.getNumero_time() + ";";
-			stmt.executeUpdate(query);
-
-			query = "UPDATE time SET pontos = pontos + " + timeB.getPontos() + ", vitorias = vitorias + "
-					+ timeB.getVitorias() + ", derrotas = derrotas + " + timeB.getDerrotas() + ", empates = empates + "
-					+ timeB.getEmpates() + ", gols_pro = gols_pro + " + golsB + ", gols_contra = gols_contra + " + golsA
-					+ ", saldo_gols = saldo_gols + " + timeB.getSaldo_gols() + ", ca = ca + " + timeB.getCa()
-					+ ", cv = cv + " + timeB.getCv() + " WHERE numero_time = " + timeB.getNumero_time() + ";";
-			stmt.executeUpdate(query);
-
 		} catch (Exception e) {
 			System.out.println("Erro: " + e.getMessage());
 			throw new Exception("Erro ao Alterar Partida.");
