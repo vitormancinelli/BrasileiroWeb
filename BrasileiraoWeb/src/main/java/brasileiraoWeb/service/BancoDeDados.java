@@ -32,6 +32,7 @@ public class BancoDeDados {
 	public void alterarPartida(int partida, int gols_a, int gols_b, int ca_a, int ca_b, int cv_a, int cv_b) throws Exception {
 		Statement stmt = null;
 		ResultSet rs = null;
+		String erro;
 		try {
 			if (gols_a >= 0 && gols_b >= 0 && ca_a >= 0 && ca_b >= 0 && cv_a >= 0 && cv_b >= 0) {
 				if (partida < 380 && partida > 0) {
@@ -149,16 +150,19 @@ public class BancoDeDados {
 							+ " WHERE numero_time = " + timeB.getNumero_time() + ";";
 					stmt.executeUpdate(query);
 				} else {
-					System.out.println("Erro: A partida a ser alterada não pode ser encontra, por favor insira um valor entre 0 e 380");
-					throw new Exception("Erro: A partida a ser alterada não pode ser encontra, por favor insira um valor entre 0 e 380");
+					erro = "A partida a ser alterada não pode ser encontra, por favor insira um valor entre 0 e 380";
+					System.out.println(erro);
+					throw new Exception(erro);
 				}
 			} else {
-				System.out.println("Erro: Valor a ser alterado na tabela não pode ser menor que zero");
-				throw new Exception("Erro: Valor a ser alterado na tabela não pode ser menor que zero");
+				erro = "Valor a ser alterado na tabela não pode ser menor que zero";
+				System.out.println(erro);
+				throw new Exception(erro);
 			}
 		} catch (Exception e) {
-			System.out.println("Erro: " + e.getMessage());
-			throw new Exception("Erro ao Alterar Partida.");
+			erro = "Erro: " + e.getMessage();
+			System.out.println(erro);
+			throw new Exception(erro);
 		}
 	}
 
