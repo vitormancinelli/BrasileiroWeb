@@ -374,89 +374,99 @@ public class BancoDeDados {
 
 		try {
 			Connection conn = getConnection();
-			Random r = new Random();
-			int golsA;
-			int golsB;
-			int caA;
-			int caB;
-			int cvA;
-			int cvB;
-			int vitoriaA;
-			int derrotaA;
-			int empate;
-			int vitoriaB;
-			int derrotaB;
-			int pontosA;
-			int pontosB;
-
-			String query = "SELECT * FROM time;";
+			String query = "SELECT pontos FROM time WHERE numero_time = 1;";
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery(query);
 			rs.next();
-			if (rs.getInt("pontos") == 0 && rs.getInt("vitorias") == 0) {
-				query = "SELECT * FROM partida;";
+			if(rs.getInt("pontos") == 0) {
+				Random r = new Random();
+				int golsA;
+				int golsB;
+				int caA;
+				int caB;
+				int cvA;
+				int cvB;
+				int vitoriaA;
+				int derrotaA;
+				int empate;
+				int vitoriaB;
+				int derrotaB;
+				int pontosA;
+				int pontosB;
+	
+				query = "SELECT * FROM time;";
 				rs = stmt.executeQuery(query);
-				while (rs.next()) {
-					golsA = r.nextInt(5);
-					golsB = r.nextInt(5);
-					caA = r.nextInt(3);
-					caB = r.nextInt(3);
-					cvA = r.nextInt(2);
-					cvB = r.nextInt(2);
-					if (golsA > golsB) {
-						vitoriaA = 1;
-						derrotaA = 0;
-						vitoriaB = 0;
-						derrotaB = 1;
-						empate = 0;
-						pontosA = 3;
-						pontosB = 0;
-					} else if (golsB > golsA) {
-						vitoriaA = 0;
-						derrotaA = 1;
-						vitoriaB = 1;
-						derrotaB = 0;
-						empate = 0;
-						pontosA = 0;
-						pontosB = 3;
-					} else {
-						vitoriaA = 0;
-						derrotaA = 0;
-						vitoriaB = 0;
-						derrotaB = 0;
-						empate = 1;
-						pontosA = 1;
-						pontosB = 1;
+				rs.next();
+				if (rs.getInt("pontos") == 0 && rs.getInt("vitorias") == 0) {
+					query = "SELECT * FROM partida;";
+					rs = stmt.executeQuery(query);
+					while (rs.next()) {
+						golsA = r.nextInt(5);
+						golsB = r.nextInt(5);
+						caA = r.nextInt(3);
+						caB = r.nextInt(3);
+						cvA = r.nextInt(2);
+						cvB = r.nextInt(2);
+						if (golsA > golsB) {
+							vitoriaA = 1;
+							derrotaA = 0;
+							vitoriaB = 0;
+							derrotaB = 1;
+							empate = 0;
+							pontosA = 3;
+							pontosB = 0;
+						} else if (golsB > golsA) {
+							vitoriaA = 0;
+							derrotaA = 1;
+							vitoriaB = 1;
+							derrotaB = 0;
+							empate = 0;
+							pontosA = 0;
+							pontosB = 3;
+						} else {
+							vitoriaA = 0;
+							derrotaA = 0;
+							vitoriaB = 0;
+							derrotaB = 0;
+							empate = 1;
+							pontosA = 1;
+							pontosB = 1;
+						}
+	
+						query = "UPDATE `brasileiro`.`partida` SET `gols_a` = '" + golsA + "', `gols_b` = '" + golsB
+								+ "', `ca_a` = '" + caA + "', `ca_b` = '" + caB + "', `cv_a` = '" + cvA + "', `cv_b` = '"
+								+ cvB + "' WHERE (numero_partida = " + rs.getInt("numero_partida") + ");";
+						stmt2 = conn.createStatement();
+						stmt2.executeUpdate(query);
+	
+						query = "UPDATE `brasileiro`.`time` SET `gols_pro` = `gols_pro` + " + golsA
+								+ ", `gols_contra` = `gols_contra` + " + golsB
+								+ ", `saldo_gols` = `gols_pro` - `gols_contra`, `ca` = `ca` + " + caA + ", `cv` = `cv` + "
+								+ cvA + ", `vitorias` = `vitorias` + " + vitoriaA + ", `derrotas` = `derrotas` + "
+								+ derrotaA + ", `empates` = `empates` + " + empate + ", `pontos` = `pontos` + " + pontosA
+								+ "  WHERE (numero_time = " + rs.getInt("time_a") + ");";
+						stmt3 = conn.createStatement();
+						stmt3.executeUpdate(query);
+	
+						query = "UPDATE `brasileiro`.`time` SET `gols_pro` = `gols_pro` + " + golsB
+								+ ", `gols_contra` = `gols_contra` + " + golsA
+								+ ", `saldo_gols` = `gols_pro` - `gols_contra`, `ca` = `ca` + " + caB + ", `cv` = `cv` + "
+								+ cvB + ", `vitorias` = `vitorias` + " + vitoriaB + ", `derrotas` = `derrotas` + "
+								+ derrotaB + ", `empates` = `empates` + " + empate + ", `pontos` = `pontos` + " + pontosB
+								+ "  WHERE (numero_time = " + rs.getInt("time_b") + ");";
+						stmt4 = conn.createStatement();
+						stmt4.executeUpdate(query);
 					}
-
-					query = "UPDATE `brasileiro`.`partida` SET `gols_a` = '" + golsA + "', `gols_b` = '" + golsB
-							+ "', `ca_a` = '" + caA + "', `ca_b` = '" + caB + "', `cv_a` = '" + cvA + "', `cv_b` = '"
-							+ cvB + "' WHERE (numero_partida = " + rs.getInt("numero_partida") + ");";
-					stmt2 = conn.createStatement();
-					stmt2.executeUpdate(query);
-
-					query = "UPDATE `brasileiro`.`time` SET `gols_pro` = `gols_pro` + " + golsA
-							+ ", `gols_contra` = `gols_contra` + " + golsB
-							+ ", `saldo_gols` = `gols_pro` - `gols_contra`, `ca` = `ca` + " + caA + ", `cv` = `cv` + "
-							+ cvA + ", `vitorias` = `vitorias` + " + vitoriaA + ", `derrotas` = `derrotas` + "
-							+ derrotaA + ", `empates` = `empates` + " + empate + ", `pontos` = `pontos` + " + pontosA
-							+ "  WHERE (numero_time = " + rs.getInt("time_a") + ");";
-					stmt3 = conn.createStatement();
-					stmt3.executeUpdate(query);
-
-					query = "UPDATE `brasileiro`.`time` SET `gols_pro` = `gols_pro` + " + golsB
-							+ ", `gols_contra` = `gols_contra` + " + golsA
-							+ ", `saldo_gols` = `gols_pro` - `gols_contra`, `ca` = `ca` + " + caB + ", `cv` = `cv` + "
-							+ cvB + ", `vitorias` = `vitorias` + " + vitoriaB + ", `derrotas` = `derrotas` + "
-							+ derrotaB + ", `empates` = `empates` + " + empate + ", `pontos` = `pontos` + " + pontosB
-							+ "  WHERE (numero_time = " + rs.getInt("time_b") + ");";
-					stmt4 = conn.createStatement();
-					stmt4.executeUpdate(query);
 				}
+			} else {
+				String erro = "O sorteio já foi realizado, caso queria realizar outro sorteio, é necessário limpar o campeonato, e fazer novamento o processo de sorteio dos times";
+				System.out.println(erro);
+				throw new Exception(erro);
 			}
 		} catch (Exception e) {
-			System.out.println("Erro : " + e.getMessage());
-			throw new Exception("Erro ao Sortear Resultados.");
+			String erro = "Erro: " + e.getMessage();
+			System.out.println(erro);
+			throw new Exception(erro);
 		}
 	}
 
