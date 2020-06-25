@@ -13,6 +13,22 @@ import brasileiraoWeb.service.BancoDeDados;
 @Controller
 public class BrasileiroController {
 	
+	@GetMapping("/SimulacaoRapida")
+	public String SimulacaoRapida(Model model) {
+		BancoDeDados bd = new BancoDeDados();
+		try {
+			bd.cadastrarCampeonato();
+			bd.sortearTimes();
+			bd.sortearResultados();
+			bd.calculoAproveitamento();
+			model.addAttribute("lista", bd.mostrarClassificaçao());
+			return "VerResultados";
+		} catch (Exception e) {
+			model.addAttribute("erro", e.getMessage());
+			return "Erro";
+		}
+	}
+	
 	@GetMapping("/CadastrarCampeonato")
 	public String CadastrarCampeonato(Model model) {
 		BancoDeDados bd = new BancoDeDados();
