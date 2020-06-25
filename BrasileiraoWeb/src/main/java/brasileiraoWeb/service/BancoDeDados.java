@@ -151,7 +151,7 @@ public class BancoDeDados {
 								+ " WHERE numero_time = " + timeB.getNumero_time() + ";";
 						stmt.executeUpdate(query);
 					} else {
-						erro = "A partida a ser alterada não pode ser encontra, por favor insira um valor entre 0 e 380";
+						erro = "A partida a ser alterada não pode ser encontra, por favor insira um valor entre 1 e 380";
 						System.out.println(erro);
 						throw new Exception(erro);
 					} 
